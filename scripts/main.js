@@ -1,5 +1,4 @@
 ﻿
-
 var roleUpgrader = require('role.upgrader');
 var roleHarvester = require('role.harvester');
 
