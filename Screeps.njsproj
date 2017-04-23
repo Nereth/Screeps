@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="scripts\" />
-    <Folder Include="scripts\roles\" />
     <Folder Include="TypeScript\" />
   </ItemGroup>
   <ItemGroup>
@@ -43,15 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="scripts\main.js" />
-    <Compile Include="scripts\roles\role.upgrader.js">
+    <Compile Include="scripts\role.upgrader.js">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="scripts\roles\role.builder.js">
+    <Content Include="scripts\role.builder.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="scripts\roles\role.harvester.js">
+    <Content Include="scripts\role.harvester.js">
       <SubType>Code</SubType>
     </Content>
   </ItemGroup>
