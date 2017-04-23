@@ -1,4 +1,5 @@
-﻿var roleUpgrader = {
+
+var roleUpgrader = {
 
 	/** @param {Creep} creep **/
 	run: function (creep) {
