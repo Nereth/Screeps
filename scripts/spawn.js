@@ -47,7 +47,9 @@ var spawn = {
 						spawn.memory.state = this.states.carrier;
 						
 						if (spawn.spawning == null && containers.length == 0 && spawn.canCreateCreep([MOVE, CARRY, CARRY, CARRY, CARRY, CARRY]) == 0) {
-							spawn.memory.creepBeginner = spawn.createCreep([MOVE, CARRY, CARRY, CARRY, CARRY, CARRY], undefined, { role: 'container', placement: spawn.memory.containerPos });
+							spawn.memory.creepContainer = spawn.createCreep([MOVE, CARRY, CARRY, CARRY, CARRY, CARRY], undefined, { role: 'container', placement: spawn.memory.containerPos });
+
+							Game.creeps[spawn.memory.creepBeginner].memory.container = spawn.memory.creepContainer;
 
 							spawn.memory.state = 0;
 						}
