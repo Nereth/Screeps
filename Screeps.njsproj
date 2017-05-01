@@ -41,8 +41,19 @@
     <TypeScriptCompile Include="TypeScript\node.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="scripts\Spawner.js" />
+    <Compile Include="scripts\Creep.Base.js" />
+    <Compile Include="scripts\Creep.Miner.js" />
+    <Compile Include="scripts\Creep.Upgrader.js" />
+    <Compile Include="scripts\Crew.Harvest.js" />
+    <Compile Include="scripts\Crew.Infastructure.js" />
+    <Compile Include="scripts\Type.js" />
+    <Compile Include="scripts\Factory.js" />
+    <Compile Include="scripts\Crew.Base.js" />
+    <Compile Include="scripts\Factory.Creep.js" />
+    <Compile Include="scripts\Room.Base.js" />
+    <Compile Include="scripts\Spawn.Base.js" />
     <Compile Include="scripts\main.js" />
+    <Compile Include="scripts\Type.Creep.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
