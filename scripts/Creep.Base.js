@@ -7,6 +7,18 @@ class CreepBase extends Creep {
 		super(creep.id);
 	}
 
+	static get State() {
+		return null;
+	}
+
+	get GetState() {
+		return this.memory.state;
+	}
+
+	set SetState(state) {
+		this.memory.state = state;
+	}
+
 	Update() {
 	}
 };
