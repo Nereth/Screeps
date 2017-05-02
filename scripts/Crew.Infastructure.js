@@ -13,7 +13,6 @@ class CrewInfastructure extends CrewBase {
 		this.memory = memory;
 
 		let creepUpgrader = Game.creeps[this.memory.upgrader];
-
 		if (creepUpgrader != null && creepUpgrader != null) {
 			this.upgrader = new CreepUpgrader(creepUpgrader);
 		}

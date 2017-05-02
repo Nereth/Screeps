@@ -1,7 +1,7 @@
 const TypeCreep = require('Type.Creep');
 
-var Type = {
+const Type = {
 	Creep: TypeCreep
-}
+};
 
 module.exports = Type;

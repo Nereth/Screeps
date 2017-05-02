@@ -2,7 +2,7 @@ const Type = require('./Type');
 
 class CreepFactory {
 	constructor() {
-		this.createQueue = new Array();
+		this.request = null;
 	}
 
 	/**
@@ -11,7 +11,14 @@ class CreepFactory {
 	* @param {Type.Creep} type
 	*/
 	RequestCreep(crew, type) {
-		this.createQueue.push({ crew: crew, type: type });
+		var request = { crew: crew, type: type };
+
+		//if (this.request != null && this.request.type == Type.Creep.Miner[0]) {
+		//	return;
+		//}
+		//else {
+			this.request = request;
+		//}
 	}
 
 	/**
@@ -20,21 +27,16 @@ class CreepFactory {
 	 */
 	HandleRequests() {
 
-		if (this.createQueue.length > 0) {
-
-			this.createQueue.reverse();
-
-			let request = this.createQueue.pop();
+		if (this.request != null) {
 			Object.keys(Game.spawns).forEach(spawnName => {
 				let spawn = Game.spawns[spawnName];
-				if (spawn.canCreateCreep(request.type) == OK) {
-					let name = spawn.createCreep(request.type);
-					request.crew.AddCreep(name, request.type);
-					
+				if (spawn.canCreateCreep(this.request.type) == OK) {
+					let name = spawn.createCreep(this.request.type);
+					this.request.crew.AddCreep(name, this.request.type);
+					this.request = null;
+					return;
 				}
 			});
-
-			this.createQueue = new Array();
 		}
 	}
 

@@ -28,7 +28,7 @@ class RoomBase extends Room {
 			sources.forEach(source => {
 				sourcesMem.push(source.id);
 				crewsMem['harvesters'].push({ source: source.id })
-				crewsMem['infastructure'].push({});
+				crewsMem['infastructure'].push({ source: source.id });
 			});
 		}
 
@@ -50,13 +50,14 @@ class RoomBase extends Room {
 	}
 
 	Update() {
-		// Update harvester crews.
-		this.crews.harvesters.forEach(crew => {
-			crew.Update();
-		});
 
 		// Update infastructure crews.
 		this.crews.infastructure.forEach(crew => {
+			crew.Update();
+		});
+
+		// Update harvester crews.
+		this.crews.harvesters.forEach(crew => {
 			crew.Update();
 		});
 	}

@@ -9,7 +9,6 @@ class CreepUpgrader extends CreepBase {
 	}
 
 	Update() {
-
 		if (this.memory.upgrading && this.carry.energy == 0) {
 			this.memory.upgrading = false;
 			this.say('?? harvest');

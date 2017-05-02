@@ -9,14 +9,8 @@ class CreepMiner extends CreepBase {
 	}
 
 	Update() {
-
-		if (this.memory.sourcePos != null) {
-			
-		}
-
 		if (this.carry.energy < this.carryCapacity) {
 			var source = Game.getObjectById(this.memory.source);
-			console.log(source);
 			if (this.harvest(source) == ERR_NOT_IN_RANGE) {
 				this.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
 			}
