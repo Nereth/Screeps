@@ -12,15 +12,23 @@ class CrewInfastructure extends CrewBase {
 
 		this.memory = memory;
 
-		let creepUpgrader = Game.creeps[this.memory.upgrader];
-		if (creepUpgrader != null && creepUpgrader != null) {
-			this.upgrader = new CreepUpgrader(creepUpgrader);
+		// Cleanup dead creeps and set logic for remaining creeps.
+		if (this.memory.upgrader != null) {
+			let creepUpgrader = Game.creeps[this.memory.upgrader];
+
+			if (creepUpgrader == null) {
+				delete Memory.creeps[this.upgrader];
+				this.upgrader = null;
+			}
+			else {
+				this.upgrader = new CreepUpgrader(creepUpgrader);
+			}
 		}
 	}
 
 	Update() {
 		if (this.upgrader == null) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Upgrader[0]);
+			Factory.Creep.RequestCreep(this, Type.Creep.Upgrader[0], 5);
 		}
 		else {
 			this.upgrader.Update();

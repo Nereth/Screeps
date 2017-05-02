@@ -9,11 +9,6 @@ module.exports.loop = function () {
 		}
 	}
 
-	if (Memory.rooms == null)
-		Memory.rooms = {};
-
-	var monitoredRooms = new Array();
-
 	Object.keys(Game.rooms).forEach(roomName => {
 		new RoomBase(roomName).Update();
 	});

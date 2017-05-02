@@ -12,15 +12,23 @@ class CrewHarvest extends CrewBase {
 
 		this.memory = memory;
 
+		// Cleanup dead creeps and set logic for remaining creeps.
 		if (this.memory.miner != null) {
 			let creepMiner = Game.creeps[this.memory.miner];
-			this.miner = new CreepMiner(creepMiner);
+
+			if (creepMiner == null) {
+				delete Memory.creeps[this.miner];
+				this.miner = null;
+			}
+			else {
+				this.miner = new CreepMiner(creepMiner);
+			}
 		}
 	}
 
 	Update() {
 		if (this.miner == null) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Miner[0]);
+			Factory.Creep.RequestCreep(this, Type.Creep.Miner[0], 10);
 		}
 		else {
 			this.miner.Update();

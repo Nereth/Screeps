@@ -9,16 +9,19 @@ class CreepFactory {
 	* Request a certain certain creep be created.
 	* @param {Crew} crew
 	* @param {Type.Creep} type
+	* @param {number} priority
 	*/
-	RequestCreep(crew, type) {
-		var request = { crew: crew, type: type };
+	RequestCreep(crew, type, priority) {
+		let newRequest = { crew: crew, type: type, priority: priority };
 
-		//if (this.request != null && this.request.type == Type.Creep.Miner[0]) {
-		//	return;
-		//}
-		//else {
-			this.request = request;
-		//}
+		if (this.request != null) {
+			if (newRequest.priority > this.request.priority) {
+				this.request = newRequest;
+				return;
+			}
+		}
+
+		this.request = newRequest;
 	}
 
 	/**
@@ -45,4 +48,5 @@ class CreepFactory {
 	}
 };
 
-module.exports = CreepFactory;
+const CreepFactoryInstance = new CreepFactory();
+module.exports = CreepFactoryInstance;
