@@ -27,7 +27,7 @@ class CreepUpgrader extends CreepBase {
 			case CreepUpgrader.State.Refueling: {
 
 				let spawn = this.room.find(FIND_MY_SPAWNS)[0];
-				console.log(this.withdraw(spawn, RESOURCE_ENERGY, this.carryCapacity));
+				this.withdraw(spawn, RESOURCE_ENERGY, this.carryCapacity);
 				if (spawn.energy > 250 && this.withdraw(spawn, this.carryCapacity) != OK) {
 					this.moveTo(spawn, { visualizePathStyle: { stroke: '#ffaa00' } });
 				}

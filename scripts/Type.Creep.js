@@ -4,6 +4,10 @@ const TypeCreep = {
 	[
 		[WORK, CARRY, MOVE], // Level 0
 	],
+	Courier:
+	[
+		[CARRY, MOVE, MOVE],
+	],
 	Upgrader:
 	[
 		[WORK, CARRY, MOVE], // Level 0

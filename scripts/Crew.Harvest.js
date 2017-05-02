@@ -1,5 +1,6 @@
 const CrewBase = require('./Crew.Base');
 const CreepMiner = require('./Creep.Miner');
+const CreepCourier = require('./Creep.Courier');
 const Type = require('./Type');
 const Factory = require('./Factory')
 
@@ -23,6 +24,19 @@ class CrewHarvest extends CrewBase {
 			else {
 				this.miner = new CreepMiner(creepMiner);
 			}
+
+			if (this.memory.courier != null) {
+				let creepCourier = Game.creeps[this.memory.courier];
+
+				if (creepCourier == null) {
+					delete Memory.creeps[this.courier];
+					this.courier = null;
+				}
+				else {
+					this.courier = new CreepCourier(creepCourier);
+					this.courier.TakeFrom = this.miner.id;
+				}
+			}
 		}
 	}
 
@@ -32,6 +46,14 @@ class CrewHarvest extends CrewBase {
 		}
 		else {
 			this.miner.Update();
+		}
+
+		if (this.miner != null && this.courier == null) {
+			Factory.Creep.RequestCreep(this, Type.Creep.Courier[0], 9);
+		}
+
+		if (this.courier != null) {
+			this.courier.Update();
 		}
 	}
 
@@ -43,6 +65,9 @@ class CrewHarvest extends CrewBase {
 		if (type == Type.Creep.Miner[0]) {
 			this.memory.miner = name;
 			Game.creeps[name].memory.source = this.memory.source;
+		}
+		else if (type == Type.Creep.Courier[0]) {
+			this.memory.courier = name;
 		}
 	}
 };
