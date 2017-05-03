@@ -9,41 +9,23 @@ class CrewInfastructure extends CrewBase {
 	*/
 	constructor(memory) {
 		super(memory);
-
-		this.memory = memory;
-
-		// Cleanup dead creeps and set logic for remaining creeps.
-		if (this.memory.upgrader != null) {
-			let creepUpgrader = Game.creeps[this.memory.upgrader];
-
-			if (creepUpgrader == null) {
-				delete Memory.creeps[this.upgrader];
-				this.upgrader = null;
-			}
-			else {
-				this.upgrader = new CreepUpgrader(creepUpgrader);
-			}
-		}
 	}
 
 	Update() {
-		if (this.upgrader == null) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Upgrader[0], 5);
+		if (this.creeps.length == 0) {
+			Factory.Creep.RequestCreep(this, Type.Creep.Upgrader.Id, 5);
 		}
-		else {
-			this.upgrader.Update();
-		}
+
+		this.creeps.forEach(creep => {
+			creep.Update();
+		});
 	}
 
 	/**
 	* @param {string} name
-	* @param {Type.Creep} type
 	*/
-	AddCreep(name, type) {
-		if (type == Type.Creep.Upgrader[0]) {
-			this.memory.upgrader = name;
-			Game.creeps[name].memory.source = this.memory.source;
-		}
+	AddCreep(name) {
+		CrewBase.prototype.AddCreep.call(this, name);
 	}
 };
 

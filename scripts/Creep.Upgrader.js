@@ -21,7 +21,6 @@ class CreepUpgrader extends CreepBase {
 	}
 
 	Update() {
-
 		switch (this.GetState) {
 			// Move to nearest energy storage and refuel.
 			case CreepUpgrader.State.Refueling: {

@@ -13,7 +13,7 @@ class CreepFactory {
 	*/
 	RequestCreep(crew, type, priority) {
 		let newRequest = { crew: crew, type: type, priority: priority };
-
+		
 		if (this.request != null) {
 			if (newRequest.priority > this.request.priority) {
 				this.request = newRequest;
@@ -30,13 +30,22 @@ class CreepFactory {
 	 */
 	HandleRequests() {
 
+		// Check if we have a request.
 		if (this.request != null) {
+			// Find a spawner that can fullfill the request.
 			Object.keys(Game.spawns).forEach(spawnName => {
 				let spawn = Game.spawns[spawnName];
-				if (spawn.canCreateCreep(this.request.type) == OK) {
-					let name = spawn.createCreep(this.request.type);
-					this.request.crew.AddCreep(name, this.request.type);
+				let type = Type.Creep[this.request.type];
+
+				if (spawn.canCreateCreep(type.Level[0]) == OK) {
+					// Create our requested creep and assign its type.
+					let creep = Game.creeps[spawn.createCreep(type.Level[0])];
+					creep.memory.type = type.Id;
+
+					// Send newly created creeps id to the crew making the request.
+					this.request.crew.AddCreep(creep.name);
 					this.request = null;
+
 					return;
 				}
 			});

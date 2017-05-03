@@ -7,17 +7,23 @@ class CreepBase extends Creep {
 		super(creep.id);
 	}
 
-	static get State() {
-		return null;
-	}
+	static get State() { return null; }
 
-	get GetState() {
-		return this.memory.state;
-	}
+	/**
+	* Returns this creeps type.
+	*/
+	get Type() { return this.memory.type; }
 
-	set SetState(state) {
-		this.memory.state = state;
-	}
+	/**
+	* Returns this creeps state.
+	*/
+	get State() { return this.memory.state; }
+
+	/**
+	* Sets this creeps state.
+	* @param {string} state
+	*/
+	set State(state) { this.memory.state = state; }
 
 	Update() {
 	}
