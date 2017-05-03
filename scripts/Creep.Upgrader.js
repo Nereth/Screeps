@@ -15,13 +15,14 @@ class CreepUpgrader extends CreepBase {
 	constructor(creep) {
 		super(creep);
 
-		if (this.GetState == null) {
-			this.SetState = CreepUpgrader.State.Refueling;
+		if (this.State == null) {
+			this.State = CreepUpgrader.State.Refueling;
 		}
 	}
 
 	Update() {
-		switch (this.GetState) {
+		console.log(this.State);
+		switch (this.State) {
 			// Move to nearest energy storage and refuel.
 			case CreepUpgrader.State.Refueling: {
 
@@ -33,7 +34,7 @@ class CreepUpgrader extends CreepBase {
 
 				if (this.carry.energy == this.carryCapacity) {
 					this.say('? upgrade');
-					this.SetState = CreepUpgrader.State.Upgrading;
+					this.State = CreepUpgrader.State.Upgrading;
 				}
 			}
 				break;
@@ -42,7 +43,7 @@ class CreepUpgrader extends CreepBase {
 
 				if (this.carry.energy == 0) {
 					this.say('?? harvest');
-					this.SetState = CreepUpgrader.State.Refueling;
+					this.State = CreepUpgrader.State.Refueling;
 				}
 
 				if (this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {

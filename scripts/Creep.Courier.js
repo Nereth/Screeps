@@ -23,14 +23,14 @@ class CreepCourier extends CreepBase {
 	constructor(creep) {
 		super(creep);
 
-		if (this.GetState == null) {
-			this.SetState = CreepCourier.State.Obtain;
+		if (this.State == null) {
+			this.State = CreepCourier.State.Obtain;
 		}
 	}
 
 	Update() {
 
-		switch (this.GetState) {
+		switch (this.State) {
 			// Move to nearest energy storage and refuel.
 			case CreepCourier.State.Obtain: {
 
