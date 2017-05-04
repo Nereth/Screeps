@@ -9,15 +9,22 @@ class CrewInfastructure extends CrewBase {
 	*/
 	constructor(memory) {
 		super(memory);
+
+		if (this.creeps[Type.Creep.Upgrader.Id] == null)
+			this.creeps[Type.Creep.Upgrader.Id] = [];
+
+		this.upgraders = this.creeps[Type.Creep.Upgrader.Id];
 	}
 
 	Update() {
-		if (this.creeps.length == 0) {
+		if(this.upgraders.length == 0) {
 			Factory.Creep.RequestCreep(this, Type.Creep.Upgrader.Id, 5);
 		}
 
-		this.creeps.forEach(creep => {
-			creep.Update();
+		Object.keys(this.creeps).forEach(type => {
+			this.creeps[type].forEach(creep => {
+				creep.Update();
+			});
 		});
 	}
 

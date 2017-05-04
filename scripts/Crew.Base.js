@@ -9,23 +9,35 @@ class CrewBase {
 		this.memory = memory;
 
 		if (this.memory.creeps == null)
-			this.memory.creeps = new Array();
+			this.memory.creeps = {};
 
 		// Prepare list of creeps.
-		this.creeps = new Array();
-		this.memory.creeps.forEach(name => {
-			// If creep is dead, dispose of its memory.
-			let creep = Game.creeps[name];
-			if (creep == null) {
-				delete Memory.creeps[name];
-			}
-			else {
-				let classType = Type.Creep[creep.memory.type].Class;
+		this.creeps = {};
+		Object.keys(this.memory.creeps).forEach(creepType => {
+			let creeps = this.memory.creeps[creepType];
+			for (let i = creeps.length - 1; i >= 0; --i) {
+				let creep = Game.creeps[creeps[i]];
 
-				if (classType == null)
-					console.log('Creep Type', creep.memory.type, 'is missing class propety!');
-				else
-					this.creeps.push(new classType(creep));
+				// If creep is dead, dispose of its memory.
+				if (creep == null) {
+					creeps.splice(i, 1);
+					delete Memory.creeps[creeps[i]];
+				}
+				// Assign creeps their classes
+				else {
+					let classType = Type.Creep[creep.memory.type].Class;
+
+					if (classType == null) {
+						console.log('Creep Type', creepType, 'is missing class propety!');
+					}
+					else {
+						if (this.creeps[creepType] == null) {
+							this.creeps[creepType] = [];
+						}
+
+						this.creeps[creepType].push(new classType(creep));
+					}
+				}
 			}
 		});
 	}
@@ -34,7 +46,13 @@ class CrewBase {
 	* @param {string} name
 	*/
 	AddCreep(name) {
-		this.memory.creeps.push(name);
+		let creep = Game.creeps[name];
+
+		if (this.memory.creeps[creep.memory.type] == null) {
+			this.memory.creeps[creep.memory.type] = [];
+		}
+
+		this.memory.creeps[creep.memory.type].push(name);
 	}
 };
 

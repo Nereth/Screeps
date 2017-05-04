@@ -21,7 +21,6 @@ class CreepUpgrader extends CreepBase {
 	}
 
 	Update() {
-		console.log(this.State);
 		switch (this.State) {
 			// Move to nearest energy storage and refuel.
 			case CreepUpgrader.State.Refueling: {
