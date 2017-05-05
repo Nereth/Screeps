@@ -9,12 +9,54 @@ class CrewBase {
 		this.memory = memory;
 
 		if (this.memory.creeps == null)
-			this.memory.creeps = {};
+			this.memory.creeps = { inactive: [], active[] };
+
+		let inactiveCreeps = this.memory.creeps.inactive;
+		let activeCreeps = this.memory.creeps.active;
+
+		// 
+		for (let i = inactiveCreeps.length - 1; i >= 0; ++i) {
+			let creep = Game.creeps[inactiveCreeps[i]];
+			// If creep is dead, dispose of its memory.
+			if (creep == null) {
+				inactiveCreeps.splice(i, 1);
+				delete Memory.creeps[creep.name];
+			}
+
+			if (creep.id != null && creep.spawning == false) {
+				activeCreeps.push(creep.id);
+				inactiveCreeps.splice(i, 1);
+			}
+		}
 
 		// Prepare list of creeps.
 		this.creeps = {};
-		Object.keys(this.memory.creeps).forEach(creepType => {
-			let creeps = this.memory.creeps[creepType];
+		for (let i = 0; i < activeCreeps.length; ++i) {
+			let creep = Game.creeps[activeCreeps[i]];
+
+			// If creep is dead, dispose of its memory.
+			if (creep == null) {
+				activeCreeps.splice(i, 1);
+				delete Memory.creeps[activeCreeps[i]];
+			}
+			// If creep is alive, assign is a creep class based on type.
+			else {
+				let type = creep.memory.type;
+
+				if (this.creeps[type] == null)
+					this.creeps[type] = [];
+
+				let creepsOfType = this.creeps[type];
+			}
+
+		}
+
+		/*
+		this.creeps = {};
+		Object.keys(activeCreeps).forEach(creepType => {
+
+			let creeps = activeCreeps[creepType];
+
 			for (let i = creeps.length - 1; i >= 0; --i) {
 				let creep = Game.creeps[creeps[i]];
 
@@ -40,19 +82,14 @@ class CrewBase {
 				}
 			}
 		});
+		*/
 	}
 
 	/**
 	* @param {string} name
 	*/
 	AddCreep(name) {
-		let creep = Game.creeps[name];
-
-		if (this.memory.creeps[creep.memory.type] == null) {
-			this.memory.creeps[creep.memory.type] = [];
-		}
-
-		this.memory.creeps[creep.memory.type].push(name);
+		this.memory.creeps.inactive.push(name);
 	}
 };
 
