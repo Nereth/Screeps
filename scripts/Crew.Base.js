@@ -9,80 +9,67 @@ class CrewBase {
 		this.memory = memory;
 
 		if (this.memory.creeps == null)
-			this.memory.creeps = { inactive: [], active[] };
+			this.memory.creeps = { inactive: [], active: [] };
 
 		let inactiveCreeps = this.memory.creeps.inactive;
 		let activeCreeps = this.memory.creeps.active;
 
-		// 
-		for (let i = inactiveCreeps.length - 1; i >= 0; ++i) {
-			let creep = Game.creeps[inactiveCreeps[i]];
-			// If creep is dead, dispose of its memory.
-			if (creep == null) {
-				inactiveCreeps.splice(i, 1);
-				delete Memory.creeps[creep.name];
-			}
-
-			if (creep.id != null && creep.spawning == false) {
-				activeCreeps.push(creep.id);
-				inactiveCreeps.splice(i, 1);
-			}
-		}
-
 		// Prepare list of creeps.
 		this.creeps = {};
-		for (let i = 0; i < activeCreeps.length; ++i) {
-			let creep = Game.creeps[activeCreeps[i]];
+		for (let i = activeCreeps.length - 1; i >= 0; --i) {
+			let creep = Game.getObjectById(activeCreeps[i]);
 
 			// If creep is dead, dispose of its memory.
 			if (creep == null) {
 				activeCreeps.splice(i, 1);
-				delete Memory.creeps[activeCreeps[i]];
+				delete Memory.creeps[creep.name];
 			}
 			// If creep is alive, assign is a creep class based on type.
 			else {
-				let type = creep.memory.type;
+				let creepType = creep.memory.type;
+				let creepClass = Type.Creep[creepType].Class;
 
-				if (this.creeps[type] == null)
-					this.creeps[type] = [];
+				if (creepClass == null) {
+					console.log('Creep Type', creepClass, 'is missing class propety!');
+				}
+				else {
+					if (this.creeps[creepType] == null)
+						this.creeps[creepType] = [];
 
-				let creepsOfType = this.creeps[type];
+					let creepsOfType = this.creeps[creepType];
+					creepsOfType.push(new creepClass(creep));
+				}
 			}
-
 		}
 
-		/*
-		this.creeps = {};
-		Object.keys(activeCreeps).forEach(creepType => {
+		// Check if any inactive creeps are now active.
+		for (let i = inactiveCreeps.length - 1; i >= 0; --i) {
+			let creep = Game.creeps[inactiveCreeps[i]];
+			// If creep is dead, dispose of its memory.
+			if (creep == null) {
+				inactiveCreeps.splice(i, 1);
+				delete Memory.creeps[inactiveCreeps[i]];
+			}
+			// Creep is done spawning. Add it to active list.
+			else if (creep.id != null && creep.spawning == false) {
+				activeCreeps.push(creep.id);
+				inactiveCreeps.splice(i, 1);
 
-			let creeps = activeCreeps[creepType];
+				let creepType = creep.memory.type;
+				let creepClass = Type.Creep[creepType].Class;
 
-			for (let i = creeps.length - 1; i >= 0; --i) {
-				let creep = Game.creeps[creeps[i]];
-
-				// If creep is dead, dispose of its memory.
-				if (creep == null) {
-					creeps.splice(i, 1);
-					delete Memory.creeps[creeps[i]];
+				if (creepClass == null) {
+					console.log('Creep Type', creepClass, 'is missing class propety!');
 				}
-				// Assign creeps their classes
 				else {
-					let classType = Type.Creep[creep.memory.type].Class;
+					if (this.creeps[creepType] == null)
+						this.creeps[creepType] = [];
 
-					if (classType == null) {
-						console.log('Creep Type', creepType, 'is missing class propety!');
-					}
-					else {
-						if (this.creeps[creepType] == null) {
-							this.creeps[creepType] = [];
-						}
-
-						this.creeps[creepType].push(new classType(creep));
-					}
+					let creepsOfType = this.creeps[creepType];
+					this.CreepActivated(new creepClass(creep));
 				}
 			}
-		});
-		*/
+		}
 	}
 
 	/**
@@ -90,6 +77,12 @@ class CrewBase {
 	*/
 	AddCreep(name) {
 		this.memory.creeps.inactive.push(name);
+	}
+
+	/**
+	* @param {Creep} creep
+	*/
+	CreepActivated(creep) {
 	}
 };
 

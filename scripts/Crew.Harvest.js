@@ -22,7 +22,6 @@ class CrewHarvest extends CrewBase {
 			this.creeps[Type.Creep.Courier.Id] = [];
 
 		this.couriers = this.creeps[Type.Creep.Courier.Id];
-
 	}
 
 	Update() {
@@ -42,28 +41,14 @@ class CrewHarvest extends CrewBase {
 	}
 
 	/**
-	* @param {string} name
+	* @param {Creep} creep
 	*/
-	AddCreep(name) {
-		CrewBase.prototype.AddCreep.call(this, name);
-		let creep = Game.creeps[name];
-
-		switch (creep.memory.type) {
-
-			case Type.Creep.Miner.Id: {
-				let miner = new CreepMiner(creep);
-				miner.TakeFrom = this.memory.source;
-				//miner.TakeTo = Game.spawns[0].id;
-				
-			}
-				break;
-
-			case Type.Creep.Courier.Id:
-			{
-				//let courier = new CreepCourier(Game.creeps[name].memory.type);
-			}
-				break;
-		}
+	CreepActivated(creep) {
+		console.log(creep.name, 'Activated!');
+		console.log(this.memory.source);
+		
+		creep.TakeFrom = this.memory.source;
+		creep.TakeTo = Game.spawns['Spawn1'].id;
 	}
 };
 
