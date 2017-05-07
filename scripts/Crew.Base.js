@@ -49,7 +49,7 @@ class CrewBase {
 				// Creep is done spawning. Add it to active list.
 				else if (creep.id != null && creep.spawning == false) {
 					this.activeCreeps.push(creep.name);
-					this.inactiveCreeps.splice(i, 1);
+					this.inactiveCreeps.splice(this.inactiveCreeps.indexOf(name), 1);
 
 					let creepType = creep.memory.type;
 					let creepClass = Type.Creep[creepType].Class;
