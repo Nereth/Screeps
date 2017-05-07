@@ -33,7 +33,6 @@ class CreepMiner extends CreepBase {
 			case CreepMiner.State.Obtain: {
 				if (this.carry.energy == this.carryCapacity) {
 					this.State = CreepMiner.State.Return;
-					console.log(this.State);
 				}
 				else if (this.TakeFrom != null) {
 					var source = Game.getObjectById(this.TakeFrom);

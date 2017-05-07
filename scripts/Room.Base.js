@@ -1,6 +1,7 @@
 const BaseSpawn = require('./Spawn.Base');
-const CrewHarvest = require('./Crew.Harvest');
+const CrewHarvest= require('./Crew.Harvest');
 const CrewInfastructure = require('./Crew.Infastructure');
+const Type = { Crew: require('./Type.Crew') };
 
 class RoomBase extends Room {
 
@@ -11,53 +12,69 @@ class RoomBase extends Room {
 		Object.assign(Room);
 		super(room);
 
-		// Prepare rooms memory
-		if (Memory.rooms[room] == undefined) {
+		this.crews = [];
+
+		// Prepare room memory.
+		if (Memory.rooms[room] == null) {
 			Memory.rooms[room] = { sources: [], crews: {} };
+		}
 
-			let roomMem = Memory.rooms[room];
-			let sourcesMem = roomMem.sources;
-			let crewsMem = roomMem.crews;
+		let sourcesMem = Memory.rooms[room].sources;
+		let crewsMem = Memory.rooms[room].crews;
 
-			// Find sources and prepare harvester crew memory.
+		// Cache sources.
+		if (sourcesMem.length == 0) {
 			let sources = Game.rooms[room].find(FIND_SOURCES);
-
-			crewsMem['harvesters'] = new Array();
-			crewsMem['infastructure'] = new Array();
-
 			sources.forEach(source => {
 				sourcesMem.push(source.id);
-				crewsMem['harvesters'].push({ source: source.id })
-				crewsMem['infastructure'].push({ source: source.id });
 			});
 		}
 
-		this.crews = { harvesters: new Array(), infastructure: new Array() };
-
-		// Create a harvester crew for each source.
-		if (Memory.rooms[room].crews.harvesters.length > 0) {
-			Memory.rooms[room].crews.harvesters.forEach(crewMem => {
-				this.crews.harvesters.push(new CrewHarvest(crewMem));
-		});
+		// Prepare harvester crews.
+		if (crewsMem[Type.Crew.Harvest.Id] == null) {
+			crewsMem[Type.Crew.Harvest.Id] = [];
 		}
 
-		// Create an infastructure crew for each source.
-		if (Memory.rooms[room].crews.infastructure.length > 0) {
-			Memory.rooms[room].crews.infastructure.forEach(crewMem => {
-				this.crews.infastructure.push(new CrewInfastructure(crewMem));
+		let harvestCrewsMem = crewsMem[Type.Crew.Harvest.Id];
+
+		if (harvestCrewsMem.length == 0) {
+			sourcesMem.forEach(source => {
+				harvestCrewsMem.push(null);
+				let crew = new CrewHarvest(room, Type.Crew.Harvest.Id, harvestCrewsMem.length - 1);
+				crew.source = source;
+				this.crews.push(crew);
 			});
+		}
+		else {
+			for (let crew in harvestCrewsMem) {
+				this.crews.push(new CrewHarvest(room, Type.Crew.Harvest.Id, crew));
+			}
+		}
+
+		// Prepare infastructure crews.
+		if (crewsMem[Type.Crew.Infastructure.Id] == null) {
+			crewsMem[Type.Crew.Infastructure.Id] = [];
+		}
+
+		let infastructureCrewMem = crewsMem[Type.Crew.Infastructure.Id];
+
+		if (infastructureCrewMem.length == 0) {
+			for (let i = 0; i < 2; ++i) {
+				infastructureCrewMem.push(null);
+				let crew = new CrewHarvest(room, Type.Crew.Infastructure.Id, infastructureCrewMem.length - 1);
+				this.crews.push(crew);
+			}
+		}
+		else {
+			for (let crew in infastructureCrewMem) {
+				this.crews.push(new CrewInfastructure(room, Type.Crew.Infastructure.Id, crew));
+			}
 		}
 	}
 
 	Update() {
-
-		// Update infastructure crews.
-		this.crews.infastructure.forEach(crew => {
-			crew.Update();
-		});
-
-		// Update harvester crews.
-		this.crews.harvesters.forEach(crew => {
+		// Update crews.
+		this.crews.forEach(crew => {
 			crew.Update();
 		});
 	}

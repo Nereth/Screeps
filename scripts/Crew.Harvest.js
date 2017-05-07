@@ -1,15 +1,19 @@
 const CrewBase = require('./Crew.Base');
-const CreepMiner = require('./Creep.Miner');
-const CreepCourier = require('./Creep.Courier');
-const Type = require('./Type');
 const Factory = require('./Factory')
+const Type = { Creep: require('./Type.Creep') }
 
 class CrewHarvest extends CrewBase {
+
+	get source() { return this.memory.source; }
+	set source(id) { this.memory.source = id; }
+
 	/**
-	* @param {Memory} memory
+	* @param {Room}		room
+	* @param {string}	role
+	* @param {number}	id
 	*/
-	constructor(memory) {
-		super(memory);
+	constructor(room, role, id) {
+		super(room, role, id);
 
 		// Prep miner list alias
 		if (this.creeps[Type.Creep.Miner.Id] == null)
@@ -25,7 +29,7 @@ class CrewHarvest extends CrewBase {
 	}
 
 	Update() {
-		if (this.miners.length == 0) {
+		if (this.miners.length < 2) {
 			Factory.Creep.RequestCreep(this, Type.Creep.Miner.Id, 10);
 		}
 
@@ -35,7 +39,9 @@ class CrewHarvest extends CrewBase {
 
 		Object.keys(this.creeps).forEach(type => {
 			this.creeps[type].forEach(creep => {
-				creep.Update();
+				if (creep.spawning == false) {
+					creep.Update();
+				}
 			});
 		});
 	}
@@ -44,10 +50,7 @@ class CrewHarvest extends CrewBase {
 	* @param {Creep} creep
 	*/
 	CreepActivated(creep) {
-		console.log(creep.name, 'Activated!');
-		console.log(this.memory.source);
-		
-		creep.TakeFrom = this.memory.source;
+		creep.TakeFrom = this.source;
 		creep.TakeTo = Game.spawns['Spawn1'].id;
 	}
 };
