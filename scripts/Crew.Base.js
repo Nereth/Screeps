@@ -7,7 +7,11 @@ class CrewBase {
 	set memory(obj) { Memory.rooms[this.room].crews[this.role][this.id] = obj; }
 
 	get inactiveCreeps() { return this.memory.creeps.inactive; }
+
 	get activeCreeps() { return this.memory.creeps.active; }
+
+	get state() { return this.memory.state; }
+	set state(state) { this.memory.state = state; }
 
 	/**
 	* @param {Room}		room
@@ -21,7 +25,7 @@ class CrewBase {
 		this.id = id;
 
 		if (this.memory == null) {
-			this.memory = { creeps: { inactive: [], active: [] } };
+			this.memory = { state: 0, creeps: { inactive: [], active: [] } };
 		}
 
 		this.creeps = {};
@@ -48,7 +52,7 @@ class CrewBase {
 				}
 				// Creep is done spawning. Add it to active list.
 				else if (creep.id != null && creep.spawning == false) {
-					this.activeCreeps.push(creep.name);
+					this.activeCreeps.push(name);
 					this.inactiveCreeps.splice(this.inactiveCreeps.indexOf(name), 1);
 
 					let creepType = creep.memory.type;

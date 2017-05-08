@@ -1,6 +1,7 @@
 const CreepMiner	= require('./Creep.Miner');
 const CreepUpgrader	= require('./Creep.Upgrader');
 const CreepCourier	= require('./Creep.Courier');
+const CreepStorage = require('./Creep.Storage');
 
 const TypeCreep = {
 	Miner: {
@@ -25,6 +26,14 @@ const TypeCreep = {
 		Level: [
 			[WORK, CARRY, MOVE],		// Level 0
 			[WORK, WORK, CARRY, MOVE],	// Level 1
+		],
+	},
+	Storage: {
+		Id: 'Storage',
+		Class: CreepStorage,
+		Level: [
+			[CARRY, CARRY, CARRY, CARRY, MOVE],		// Level 0
+			[CARRY, CARRY, CARRY, CARRY, MOVE],		// Level 0
 		],
 	},
 };

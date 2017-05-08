@@ -33,28 +33,28 @@ class CreepCourier extends CreepBase {
 		switch (this.State) {
 			// Move to nearest energy storage and refuel.
 			case CreepCourier.State.Obtain: {
-
 				if (this.TakeFrom != null) {
 					var source = Game.getObjectById(this.TakeFrom);
 					if (this.transfer(source, RESOURCE_ENERGY, this.carryCapacity) == ERR_NOT_IN_RANGE) {
 						this.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+					}
+					else if (this.carry.energy == this.carryCapacity) {
+						this.State = CreepCourier.State.Return;
 					}
 				}
 			}
 				break;
 			// Upgrade room controller.
 			case CreepCourier.State.Return: {
-
-				/*
 				if (this.carry.energy == 0) {
-					this.say('?? harvest');
-					this.SetState = CreepUpgrader.State.Refueling;
+					this.State = CreepCourier.State.Obtain;
 				}
-
-				if (this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {
-					this.moveTo(this.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
+				else if (this.TakeTo != null) {
+					var storage = Game.getObjectById(this.TakeTo);
+					if (this.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+						this.moveTo(storage, { visualizePathStyle: { stroke: '#ffffff' } });
+					}
 				}
-				*/
 			}
 				break;
 		}

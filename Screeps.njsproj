@@ -44,6 +44,7 @@
     <Compile Include="scripts\Creep.Base.js" />
     <Compile Include="scripts\Creep.Courier.js" />
     <Compile Include="scripts\Creep.Miner.js" />
+    <Compile Include="scripts\Creep.Storage.js" />
     <Compile Include="scripts\Creep.Upgrader.js" />
     <Compile Include="scripts\Crew.Harvest.js" />
     <Compile Include="scripts\Crew.Infastructure.js" />

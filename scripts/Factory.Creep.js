@@ -39,7 +39,6 @@ class CreepFactory {
 				if (spawn.canCreateCreep(type.Level[0]) == OK) {
 					// Request creep be created and send its name to the crew it belongs too.
 					let name = spawn.createCreep(type.Level[0], null, { type: this.request.type });
-					Game.creeps[name].type = this.request.type;
 					this.request.crew.AddCreep(name);
 					this.request = null;
 					break;
