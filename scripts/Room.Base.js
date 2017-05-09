@@ -42,6 +42,7 @@ class RoomBase extends Room {
 				harvestCrewsMem.push(null);
 				let crew = new CrewHarvest(room, Type.Crew.Harvest.Id, harvestCrewsMem.length - 1);
 				crew.source = source;
+				crew.depot = Game.spawns['Spawn1'].id;
 				this.crews.push(crew);
 			});
 		}

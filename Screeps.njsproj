@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="scripts\Creep.Base.js" />
+    <Compile Include="scripts\Creep.Builder.js" />
     <Compile Include="scripts\Creep.Courier.js" />
     <Compile Include="scripts\Creep.Miner.js" />
     <Compile Include="scripts\Creep.Storage.js" />

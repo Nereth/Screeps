@@ -35,22 +35,30 @@ class CreepStorage extends CreepBase {
 		switch (this.State) {
 			// Move to enery source and harvest it.
 			case CreepStorage.State.Idle: {
+				// Check if we are at our set location. If not switch to move state.
 				let location = new RoomPosition(this.Location.x, this.Location.y, this.Location.roomName);
-
-				this.Accessors.forEach(accessor => {
-					this.transfer(Game.getObjectById(accessor), RESOURCE_ENERGY);
-				});
-
 				if (!location.isEqualTo(this.pos)) {
 					this.State = CreepStorage.State.Move;
 				}
+				else {
+					// Transfer energy to nearby objects in accessors list.
+					this.Accessors.forEach(accessor => {
+						if (Game.getObjectById(accessor) == null) {
+							this.Accessors.splice(this.Accessors.indexOf(accessor), 1);
+						}
+
+						this.transfer(Game.getObjectById(accessor), RESOURCE_ENERGY);
+					});
+				}
 			}
 				break;
-			// Move to drop location and transfer energy to it.
+			
 			case CreepStorage.State.Move: {
+				// Move towards our set location.
 				let location = new RoomPosition(this.Location.x, this.Location.y, this.Location.roomName);
 				this.moveTo(location, { visualizePathStyle: { stroke: '#ffaa00' } });
 
+				// If at location switch to idle state.
 				if (location.isEqualTo(this.pos)) {
 					this.State = CreepStorage.State.Idle;
 				}

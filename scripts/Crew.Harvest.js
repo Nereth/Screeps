@@ -12,7 +12,13 @@ class CrewHarvest extends CrewBase {
 	}
 
 	get source() { return this.memory.source; }
-	set source(id) { this.memory.source = id; }
+	set source(id) { this.updatePath = true; this.memory.source = id; }
+
+	get depot() { return this.memory.depot; }
+	set depot(id) { this.updatePath = true; this.memory.depot = id; }
+
+	get updatePath() { return this.memory.updatePath; }
+	set updatePath(value) { this.memory.updatePath = value; }
 
 	get updateOrders() { return this.memory.updateOrders; }
 	set updateOrders(value) { this.memory.updateOrders = value; }
@@ -45,6 +51,18 @@ class CrewHarvest extends CrewBase {
 
 		if (this.updateOrders == null)
 			this.updateOrders = false;
+
+		if (this.updatePath == null)
+			this.updatePath = false;
+
+		if (this.memory.maxMiners == null)
+			this.memory.maxMiners = 1;
+
+		if (this.memory.maxStorage == null)
+			this.memory.maxStorage = 1;
+
+		if (this.memory.maxCouriers == null)
+			this.memory.maxCouriers = 1;
 	}
 
 	Update() {
@@ -52,6 +70,8 @@ class CrewHarvest extends CrewBase {
 		this.UpdateCreepRequests();
 
 		this.UpdateState();
+
+		this.UpdatePath();
 
 		this.UpdateOrders();
 
@@ -65,15 +85,15 @@ class CrewHarvest extends CrewBase {
 	}
 
 	UpdateCreepRequests() {
-		if (this.miners.length < 1) {
+		if (this.miners.length < this.memory.maxMiners) {
 			Factory.Creep.RequestCreep(this, Type.Creep.Miner.Id, 10);
 		}
 
-		if (this.storage.length < 1) {
+		if (this.storage.length < this.memory.maxStorage) {
 			Factory.Creep.RequestCreep(this, Type.Creep.Storage.Id, 10);
 		}
 
-		if (this.couriers.length < 2) {
+		if (this.couriers.length < this.memory.maxCouriers) {
 			Factory.Creep.RequestCreep(this, Type.Creep.Courier.Id, 10);
 		}
 	}
@@ -99,14 +119,37 @@ class CrewHarvest extends CrewBase {
 		}
 	}
 
+	UpdatePath() {
+		if (this.updatePath == true) {
+			if (this.source != null && this.depot != null) {
+				let source = Game.getObjectById(this.source);
+				let depot = Game.getObjectById(this.depot);
+
+				let path = PathFinder.search(source.pos, depot.pos).path;
+
+				path.forEach(pos => {
+					Game.rooms[this.room].createConstructionSite(pos, STRUCTURE_ROAD);
+				});
+
+				this.memory.maxCouriers = Math.round(path.length / 8 - 1);
+
+				if (this.memory.maxCouriers == 0)
+					this.memory.maxCouriers = 1;
+
+				this.updateOrders = true;
+			}
+		}
+
+		this.updatePath = false;
+	}
+
 	UpdateOrders() {
 		if (this.updateOrders == true) {
-			console.log('Updating Orders:', this.state);
 			switch (this.state) {
 				case CrewHarvest.State.Partial: {
 					this.miners.forEach(miner => {
 						miner.TakeFrom = this.source;
-						miner.TakeTo = Game.spawns['Spawn1'].id;
+						miner.TakeTo = this.depot;
 					});
 
 				}
@@ -118,10 +161,13 @@ class CrewHarvest extends CrewBase {
 						miner.TakeTo = this.storage[0].id;
 					});
 
-					this.couriers.forEach(courier => {
-						this.storage[0].Accessors.push(courier.id);
-						courier.TakeFrom = this.storage[0].id;
-						courier.TakeTo = Game.spawns['Spawn1'].id;
+					this.storage.forEach(storage => {
+						storage.Accessors = [];
+						this.couriers.forEach(courier => {
+							storage.Accessors.push(courier.id);
+							courier.TakeFrom = storage.id;
+							courier.TakeTo = this.depot;
+						});
 					});
 				}
 					break;
