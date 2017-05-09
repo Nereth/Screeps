@@ -133,7 +133,7 @@ class CrewHarvest extends CrewBase {
 
 				this.memory.maxCouriers = Math.round(path.length / 8 - 1);
 
-				if (this.memory.maxCouriers == 0)
+				if (this.memory.maxCouriers <= 0)
 					this.memory.maxCouriers = 1;
 
 				this.updateOrders = true;
