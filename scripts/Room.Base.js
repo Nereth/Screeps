@@ -1,7 +1,7 @@
 const BaseSpawn = require('./Spawn.Base');
 const CrewHarvest= require('./Crew.Harvest');
 const CrewInfastructure = require('./Crew.Infastructure');
-const Type = { Crew: require('./Type.Crew') };
+const Role = { Crew: require('./Role.Crew') };
 
 class RoomBase extends Room {
 
@@ -31,16 +31,16 @@ class RoomBase extends Room {
 		}
 
 		// Prepare harvester crews.
-		if (crewsMem[Type.Crew.Harvest.Id] == null) {
-			crewsMem[Type.Crew.Harvest.Id] = [];
+		if (crewsMem[Role.Crew.Harvest.Id] == null) {
+			crewsMem[Role.Crew.Harvest.Id] = [];
 		}
 
-		let harvestCrewsMem = crewsMem[Type.Crew.Harvest.Id];
+		let harvestCrewsMem = crewsMem[Role.Crew.Harvest.Id];
 
 		if (harvestCrewsMem.length == 0) {
 			sourcesMem.forEach(source => {
 				harvestCrewsMem.push(null);
-				let crew = new CrewHarvest(room, Type.Crew.Harvest.Id, harvestCrewsMem.length - 1);
+				let crew = new CrewHarvest(room, Role.Crew.Harvest.Id, harvestCrewsMem.length - 1);
 				crew.source = source;
 				crew.depot = Game.spawns['Spawn1'].id;
 				this.crews.push(crew);
@@ -48,27 +48,27 @@ class RoomBase extends Room {
 		}
 		else {
 			for (let crew in harvestCrewsMem) {
-				this.crews.push(new CrewHarvest(room, Type.Crew.Harvest.Id, crew));
+				this.crews.push(new CrewHarvest(room, Role.Crew.Harvest.Id, crew));
 			}
 		}
 
 		// Prepare infastructure crews.
-		if (crewsMem[Type.Crew.Infastructure.Id] == null) {
-			crewsMem[Type.Crew.Infastructure.Id] = [];
+		if (crewsMem[Role.Crew.Infastructure.Id] == null) {
+			crewsMem[Role.Crew.Infastructure.Id] = [];
 		}
 
-		let infastructureCrewMem = crewsMem[Type.Crew.Infastructure.Id];
+		let infastructureCrewMem = crewsMem[Role.Crew.Infastructure.Id];
 
 		if (infastructureCrewMem.length == 0) {
 			for (let i = 0; i < 2; ++i) {
 				infastructureCrewMem.push(null);
-				let crew = new CrewHarvest(room, Type.Crew.Infastructure.Id, infastructureCrewMem.length - 1);
+				let crew = new CrewHarvest(room, Role.Crew.Infastructure.Id, infastructureCrewMem.length - 1);
 				this.crews.push(crew);
 			}
 		}
 		else {
 			for (let crew in infastructureCrewMem) {
-				this.crews.push(new CrewInfastructure(room, Type.Crew.Infastructure.Id, crew));
+				this.crews.push(new CrewInfastructure(room, Role.Crew.Infastructure.Id, crew));
 			}
 		}
 	}

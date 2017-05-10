@@ -1,4 +1,4 @@
-const Type = { Creep: require('./Type.Creep') }
+const Role = { Creep: require('./Role.Creep') }
 
 class CreepFactory {
 	constructor() {
@@ -8,11 +8,11 @@ class CreepFactory {
 	/**
 	* Request a certain certain creep be created.
 	* @param {Crew} crew
-	* @param {Type.Creep} type
+	* @param {Role.Creep} role
 	* @param {number} priority
 	*/
-	RequestCreep(crew, type, priority) {
-		let newRequest = { crew: crew, type: type, priority: priority };
+	RequestCreep(crew, role, priority) {
+		let newRequest = { crew: crew, role: role, priority: priority };
 
 		if (this.request == null) {
 			this.request = newRequest;
@@ -26,7 +26,7 @@ class CreepFactory {
 
 	/**
 	 * Sorts creep creation requests, sends newly created
-	 * name and type for creep to the crew that requested them.
+	 * name and role for creep to the crew that requested them.
 	 */
 	HandleRequests() {
 
@@ -35,10 +35,10 @@ class CreepFactory {
 			// Find a spawner that can fullfill the request.
 			for (let name in Game.spawns) {
 				let spawn = Game.spawns[name];
-				let type = Type.Creep[this.request.type];
-				if (spawn.canCreateCreep(type.Level[0]) == OK) {
+				let role = Role.Creep[this.request.role];
+				if (spawn.canCreateCreep(role.Level[0]) == OK) {
 					// Request creep be created and send its name to the crew it belongs too.
-					let name = spawn.createCreep(type.Level[0], null, { type: this.request.type });
+					let name = spawn.createCreep(role.Level[0], null, { role: this.request.role });
 					this.request.crew.AddCreep(name);
 					this.request = null;
 					break;

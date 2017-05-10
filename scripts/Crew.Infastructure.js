@@ -1,5 +1,5 @@
 const CrewBase = require('./Crew.Base');
-const Type = { Creep: require('./Type.Creep') }
+const Role = { Creep: require('./Role.Creep') }
 const Factory = require('./Factory')
 
 class CrewInfastructure extends CrewBase {
@@ -12,29 +12,37 @@ class CrewInfastructure extends CrewBase {
 		super(room, role, id);
 
 		// Prep upgrader list alias
-		if (this.creeps[Type.Creep.Upgrader.Id] == null)
-			this.creeps[Type.Creep.Upgrader.Id] = [];
+		if (this.creeps[Role.Creep.Upgrader.Id] == null)
+			this.creeps[Role.Creep.Upgrader.Id] = [];
 
-		this.upgraders = this.creeps[Type.Creep.Upgrader.Id];
+		this.upgraders = this.creeps[Role.Creep.Upgrader.Id];
 
 		// Prep builder list alias
-		if (this.creeps[Type.Creep.Builder.Id] == null)
-			this.creeps[Type.Creep.Builder.Id] = [];
+		if (this.creeps[Role.Creep.Builder.Id] == null)
+			this.creeps[Role.Creep.Builder.Id] = [];
 
-		this.builders = this.creeps[Type.Creep.Builder.Id];
+		this.builders = this.creeps[Role.Creep.Builder.Id];
+
+		// Initialize creep counts.
+		if(this.creepsCountCurrent[Role.Creep.Upgrader.Id] == null) { this.creepsCountCurrent[Role.Creep.Upgrader.Id] = 0; }
+		if(this.creepsCountCurrent[Role.Creep.Builder.Id] == null)	{ this.creepsCountCurrent[Role.Creep.Builder.Id] = 0; }
+
+		// Initialize max creep counts.
+		if(this.creepsCountMax[Role.Creep.Upgrader.Id] == null) { this.creepsCountMax[Role.Creep.Upgrader.Id] = 1; }
+		if(this.creepsCountMax[Role.Creep.Builder.Id] == null) 	{ this.creepsCountMax[Role.Creep.Builder.Id] = 2; }
 	}
 
 	Update() {
-		if (this.upgraders.length < 1) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Upgrader.Id, 5);
+		if (this.creepsCountCurrent[Role.Creep.Upgrader.Id] < this.creepsCountMax[Role.Creep.Upgrader.Id]) {
+			Factory.Creep.RequestCreep(this, Role.Creep.Upgrader.Id, 5);
 		}
 
-		if (this.builders.length < 3) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Builder.Id, 5);
+		if (this.creepsCountCurrent[Role.Creep.Builder.Id] < this.creepsCountMax[Role.Creep.Builder.Id]) {
+			Factory.Creep.RequestCreep(this, Role.Creep.Builder.Id, 5);
 		}
 
-		Object.keys(this.creeps).forEach(type => {
-			this.creeps[type].forEach(creep => {
+		Object.keys(this.creeps).forEach(role => {
+			this.creeps[role].forEach(creep => {
 				if(creep.spawning == false)
 					creep.Update();
 			});

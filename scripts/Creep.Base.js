@@ -10,9 +10,9 @@ class CreepBase extends Creep {
 	static get State() { return null; }
 
 	/**
-	* Returns this creeps type.
+	* Returns this creeps role.
 	*/
-	get Type() { return this.memory.type; }
+	get Role() { return this.memory.role; }
 
 	/**
 	* Returns this creeps state.

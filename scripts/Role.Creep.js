@@ -4,7 +4,7 @@ const CreepCourier	= require('./Creep.Courier');
 const CreepStorage = require('./Creep.Storage');
 const CreepBuilder= require('./Creep.Builder');
 
-const TypeCreep = {
+const RoleCreep = {
 	Miner: {
 		Id: 'Miner',
 		Class: CreepMiner,
@@ -47,4 +47,4 @@ const TypeCreep = {
 	},
 };
 
-module.exports = TypeCreep;
+module.exports = RoleCreep;

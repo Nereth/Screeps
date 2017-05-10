@@ -1,6 +1,6 @@
 const CrewBase = require('./Crew.Base');
 const Factory = require('./Factory')
-const Type = { Creep: require('./Type.Creep') }
+const Role = { Creep: require('./Role.Creep') }
 
 class CrewHarvest extends CrewBase {
 
@@ -32,37 +32,38 @@ class CrewHarvest extends CrewBase {
 		super(room, role, id);
 
 		// Prep miner list alias
-		if (this.creeps[Type.Creep.Miner.Id] == null)
-			this.creeps[Type.Creep.Miner.Id] = [];
+		if (this.creeps[Role.Creep.Miner.Id] == null)
+			this.creeps[Role.Creep.Miner.Id] = [];
 
-		this.miners = this.creeps[Type.Creep.Miner.Id];
-
-		// Prep courier list alias
-		if (this.creeps[Type.Creep.Storage.Id] == null)
-			this.creeps[Type.Creep.Storage.Id] = [];
-
-		this.storage = this.creeps[Type.Creep.Storage.Id];
+		this.miners = this.creeps[Role.Creep.Miner.Id];
 
 		// Prep courier list alias
-		if (this.creeps[Type.Creep.Courier.Id] == null)
-			this.creeps[Type.Creep.Courier.Id] = [];
+		if (this.creeps[Role.Creep.Storage.Id] == null)
+			this.creeps[Role.Creep.Storage.Id] = [];
 
-		this.couriers = this.creeps[Type.Creep.Courier.Id];
+		this.storage = this.creeps[Role.Creep.Storage.Id];
+
+		// Prep courier list alias
+		if (this.creeps[Role.Creep.Courier.Id] == null)
+			this.creeps[Role.Creep.Courier.Id] = [];
+
+		this.couriers = this.creeps[Role.Creep.Courier.Id];
+
+		// Initialize creep counts.
+		if(this.creepsCountCurrent[Role.Creep.Miner.Id] == null) 	{ this.creepsCountCurrent[Role.Creep.Miner.Id] = 0; }
+		if(this.creepsCountCurrent[Role.Creep.Storage.Id] == null)	{ this.creepsCountCurrent[Role.Creep.Storage.Id] = 0; }
+		if(this.creepsCountCurrent[Role.Creep.Courier.Id] == null) 	{ this.creepsCountCurrent[Role.Creep.Courier.Id] = 0; }
+
+		// Initialize max creep counts.
+		if(this.creepsCountMax[Role.Creep.Miner.Id] == null) 	{ this.creepsCountMax[Role.Creep.Miner.Id] = 1; }
+		if(this.creepsCountMax[Role.Creep.Storage.Id] == null) 	{ this.creepsCountMax[Role.Creep.Storage.Id] = 1; }
+		if(this.creepsCountMax[Role.Creep.Courier.Id] == null) 	{ this.creepsCountMax[Role.Creep.Courier.Id] = 1; }
 
 		if (this.updateOrders == null)
 			this.updateOrders = false;
 
 		if (this.updatePath == null)
 			this.updatePath = false;
-
-		if (this.memory.maxMiners == null)
-			this.memory.maxMiners = 1;
-
-		if (this.memory.maxStorage == null)
-			this.memory.maxStorage = 1;
-
-		if (this.memory.maxCouriers == null)
-			this.memory.maxCouriers = 1;
 	}
 
 	Update() {
@@ -75,8 +76,8 @@ class CrewHarvest extends CrewBase {
 
 		this.UpdateOrders();
 
-		Object.keys(this.creeps).forEach(type => {
-			this.creeps[type].forEach(creep => {
+		Object.keys(this.creeps).forEach(role => {
+			this.creeps[role].forEach(creep => {
 				if (creep.spawning == false) {
 					creep.Update();
 				}
@@ -85,16 +86,16 @@ class CrewHarvest extends CrewBase {
 	}
 
 	UpdateCreepRequests() {
-		if (this.miners.length < this.memory.maxMiners) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Miner.Id, 10);
+		if (this.creepsCountCurrent[Role.Creep.Miner.Id] < this.creepsCountMax[Role.Creep.Miner.Id]) {
+			Factory.Creep.RequestCreep(this, Role.Creep.Miner.Id, 10);
 		}
 
-		if (this.storage.length < this.memory.maxStorage) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Storage.Id, 10);
+		if (this.creepsCountCurrent[Role.Creep.Storage.Id] < this.creepsCountMax[Role.Creep.Storage.Id]) {
+			Factory.Creep.RequestCreep(this, Role.Creep.Storage.Id, 10);
 		}
 
-		if (this.couriers.length < this.memory.maxCouriers) {
-			Factory.Creep.RequestCreep(this, Type.Creep.Courier.Id, 10);
+		if (this.creepsCountCurrent[Role.Creep.Courier.Id] < this.creepsCountMax[Role.Creep.Courier.Id]) {
+			Factory.Creep.RequestCreep(this, Role.Creep.Courier.Id, 10);
 		}
 	}
 
@@ -127,14 +128,15 @@ class CrewHarvest extends CrewBase {
 
 				let path = PathFinder.search(source.pos, depot.pos).path;
 
+/*
 				path.forEach(pos => {
 					Game.rooms[this.room].createConstructionSite(pos, STRUCTURE_ROAD);
 				});
+*/
+				this.creepsCountMax[Role.Creep.Courier.Id] = Math.round(path.length / 8 - 1);
 
-				this.memory.maxCouriers = Math.round(path.length / 8 - 1);
-
-				if (this.memory.maxCouriers <= 0)
-					this.memory.maxCouriers = 1;
+				if (this.creepsCountMax[Role.Creep.Courier.Id] == 0)
+					this.creepsCountMax[Role.Creep.Courier.Id] = 1;
 
 				this.updateOrders = true;
 			}
@@ -182,10 +184,10 @@ class CrewHarvest extends CrewBase {
 	*/
 	CreepActivated(creep) {
 
-		console.log('Activated', creep.Type);
+		console.log('Activated', creep.Role);
 
-		switch (creep.Type) {
-			case Type.Creep.Storage.Id: {
+		switch (creep.Role) {
+			case Role.Creep.Storage.Id: {
 				let source = Game.getObjectById(this.source);
 				let path = PathFinder.search(source.pos, Game.spawns['Spawn1'].pos, 1).path;
 

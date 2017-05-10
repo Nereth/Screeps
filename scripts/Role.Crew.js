@@ -1,7 +1,7 @@
 const CrewHarvest = require('./Crew.Harvest');
 const CrewInfastructure = require('./Crew.Infastructure');
 
-const TypeCrew = {
+const RoleCrew = {
 	Harvest: {
 		Id: 'Harvest',
 		Class: CrewHarvest,
@@ -12,4 +12,4 @@ const TypeCrew = {
 	},
 };
 
-module.exports = TypeCrew;
+module.exports = RoleCrew;
