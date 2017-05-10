@@ -47,7 +47,14 @@ class CrewBase {
 			// If creep is dead, dispose of its memory.
 			if (creep == null) {
 				this.creepsInactive.splice(this.creepsInactive.indexOf(name), 1);
-				this.creepsCountCurrent[Memory.creeps[name].role]--;
+				
+				let role = Memory.creeps[name].role;
+				this.creepsCountCurrent[role]--;
+
+				if(this.creepsCountCurrent[role] < 0) {
+					this.creepsCountCurrent[role] = 0;
+				}
+
 				delete Memory.creeps[name];
 			}
 			else {
@@ -86,7 +93,14 @@ class CrewBase {
 			// If creep is dead, dispose of its memory.
 			if (creep == null) {
 				this.creepsActive.splice(this.creepsActive.indexOf(name), 1);
-				this.creepsCountCurrent[Memory.creeps[name].role]--;
+
+				let role = Memory.creeps[name].role;
+				this.creepsCountCurrent[role]--;
+
+				if(this.creepsCountCurrent[role] < 0) {
+					this.creepsCountCurrent[role] = 0;
+				}
+
 				delete Memory.creeps[name];
 			}
 			// If creep is alive, assign is a creep class based on role.
@@ -121,6 +135,10 @@ class CrewBase {
 		}
 		else {
 			this.creepsCountCurrent[creepRole]++;
+
+			if(this.creepsCountCurrent[creepRole] > this.creepsCountMax[creepRole]) {
+				this.creepsCountCurrent[creepRole] = this.creepsCountMax[creepRole];
+			}
 		}
 	}
 
