@@ -1,7 +1,7 @@
-const BuildManager = require('Manager.Build');
+const ManagerBuild = require('Manager.Build');
 
 var Manager = {
-	Build: BuildManager,
+	Build: ManagerBuild,
 
 	Update: function () {
 		this.Build.Update();

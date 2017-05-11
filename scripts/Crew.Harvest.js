@@ -135,7 +135,7 @@ class CrewHarvest extends CrewBase {
 */
 				this.creepsCountMax[Role.Creep.Courier.Id] = Math.round(path.length / 8 - 1);
 
-				if (this.creepsCountMax[Role.Creep.Courier.Id] <= 0)
+				if (this.creepsCountMax[Role.Creep.Courier.Id] == 0)
 					this.creepsCountMax[Role.Creep.Courier.Id] = 1;
 
 				this.updateOrders = true;
