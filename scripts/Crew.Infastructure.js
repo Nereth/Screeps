@@ -1,8 +1,22 @@
 const CrewBase = require('./Crew.Base');
 const Role = { Creep: require('./Role.Creep') }
 const Factory = require('./Factory')
+const Manager = require('./Manager')
 
 class CrewInfastructure extends CrewBase {
+	
+	get construct() { return this.memory.construct; }
+	set construct(id) {
+		this.memory.construct = id;
+
+		this.builders.forEach(builder =>{
+			builder.construct = this.construct;
+		});
+	}
+
+	get repair() { return this.memory.repair; }
+	set repair(id) { this.memory.repair = id; }
+	
 	/**
 	* @param {Room}		room
 	* @param {string}	role
@@ -41,10 +55,22 @@ class CrewInfastructure extends CrewBase {
 			Factory.Creep.RequestCreep(this, Role.Creep.Builder.Id, 5);
 		}
 
+		if(this.construct == null) {
+			this.construct = Manager.Build.RequestTask();
+		}
+		else {
+			let construct = Game.getObjectById(this.construct);
+
+			if(construct == null) {
+				this.construct = null;
+			}
+		}
+
 		Object.keys(this.creeps).forEach(role => {
 			this.creeps[role].forEach(creep => {
-				if(creep.spawning == false)
+				if(creep.spawning == false) {
 					creep.Update();
+				}
 			});
 		});
 	}
