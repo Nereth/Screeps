@@ -5,7 +5,7 @@ const Manager = require('./Manager');
 var rooms = null;
 
 module.exports.loop = function () {
-/*
+
 	Object.keys(Game.rooms).forEach(roomName => {
 		new RoomBase(roomName).Update();
 	});
@@ -13,12 +13,11 @@ module.exports.loop = function () {
 	Factory.Update();
 
 	Manager.Update();
-*/
 
-	Manager.Build.RequestConstruction(STRUCTURE_ROAD, new RoomPosition(21, 21, 'sim'));
+	//Manager.Build.RequestConstruction(STRUCTURE_ROAD, new RoomPosition(21, 21, 'sim'));
 
-	let test = Manager.Build.RequestTask();
+	//let test = Manager.Build.RequestTask();
 
-	console.log('Requested Task:', test);
+	//console.log('Requested Task:', test);
 
 }

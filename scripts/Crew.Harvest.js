@@ -1,6 +1,7 @@
 const CrewBase = require('./Crew.Base');
 const Factory = require('./Factory')
 const Role = { Creep: require('./Role.Creep') }
+const Manager = require('./Manager');
 
 class CrewHarvest extends CrewBase {
 
@@ -128,11 +129,11 @@ class CrewHarvest extends CrewBase {
 
 				let path = PathFinder.search(source.pos, depot.pos).path;
 
-/*
 				path.forEach(pos => {
-					Game.rooms[this.room].createConstructionSite(pos, STRUCTURE_ROAD);
+					console.log('Request Construct:', STRUCTURE_ROAD, pos);
+					Manager.Build.RequestConstruction(STRUCTURE_ROAD, pos);
 				});
-*/
+
 				this.creepsCountMax[Role.Creep.Courier.Id] = Math.round(path.length / 8 - 1);
 
 				if (this.creepsCountMax[Role.Creep.Courier.Id] == 0)

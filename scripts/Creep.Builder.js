@@ -2,6 +2,9 @@ const CreepBase = require('./Creep.Base');
 
 class CreepBuilder extends CreepBase {
 
+	get construct() { return this.memory.construct; }
+	set construct(id) { this.memory.construct = id; }
+
 	static get State() {
 		return {
 			Refueling: 0,
@@ -42,10 +45,10 @@ class CreepBuilder extends CreepBase {
 					this.State = CreepBuilder.State.Refueling;
 				}
 
-				var targets = this.room.find(FIND_CONSTRUCTION_SITES);
-				if (targets.length) {
-					if (this.build(targets[0]) == ERR_NOT_IN_RANGE) {
-						this.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+				if(this.construct != null) {
+					let construct = Game.getObjectById(this.construct);
+					if(construct != null && this.build(construct) == ERR_NOT_IN_RANGE) {
+						this.moveTo(construct, { visualizePathStyle: { stroke: '#ffffff' } });
 					}
 				}
 			}

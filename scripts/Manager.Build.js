@@ -18,7 +18,12 @@ class ManagerBuild {
 	}
 
 	Update() {
-
+		this.queueTask.forEach(task => {
+			let construction = Game.getObjectById(task);
+			if(construction == null) {
+				this.queueTask.splice(this.queueTask.indexOf(task), 1);
+			}
+		})
 	}
 
 	/**
