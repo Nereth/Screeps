@@ -15,9 +15,10 @@ class RoomBase extends Room {
 		this.crews = [];
 
 		// Prepare room memory.
-		if (Memory.rooms[room] == null) {
-			Memory.rooms[room] = { sources: [], crews: {} };
-		}
+		if(Memory.rooms == null) { Memory.rooms = {}; }
+		if(Memory.rooms[room] == null) { Memory.rooms[room] = {}; }
+		if(Memory.rooms[room].sources == null) { Memory.rooms[room].sources = []; }
+		if(Memory.rooms[room].crews == null) { Memory.rooms[room].crews = {}; }
 
 		let sourcesMem = Memory.rooms[room].sources;
 		let crewsMem = Memory.rooms[room].crews;
