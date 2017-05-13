@@ -47,7 +47,10 @@ class CrewBase {
 			// If creep is dead, dispose of its memory.
 			if (creep == null) {
 				this.creepsInactive.splice(this.creepsInactive.indexOf(name), 1);
-				this.creepsCountCurrent[Memory.creeps[name].role]--;
+
+				if(this.creepsCountCurrent[Memory.creeps[name].role] > 0)
+					this.creepsCountCurrent[Memory.creeps[name].role]--;
+				
 				delete Memory.creeps[name];
 			}
 			else {
@@ -86,7 +89,10 @@ class CrewBase {
 			// If creep is dead, dispose of its memory.
 			if (creep == null) {
 				this.creepsActive.splice(this.creepsActive.indexOf(name), 1);
-				this.creepsCountCurrent[Memory.creeps[name].role]--;
+
+				if(this.creepsCountCurrent[Memory.creeps[name].role] > 0)
+					this.creepsCountCurrent[Memory.creeps[name].role]--;
+					
 				delete Memory.creeps[name];
 			}
 			// If creep is alive, assign is a creep class based on role.
