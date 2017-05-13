@@ -1,5 +1,4 @@
 const CrewBase = require('./Crew.Base');
-const Factory = require('./Factory')
 const Role = { Creep: require('./Role.Creep') }
 const Manager = require('./Manager');
 
@@ -88,15 +87,15 @@ class CrewHarvest extends CrewBase {
 
 	UpdateCreepRequests() {
 		if (this.creepsCountCurrent[Role.Creep.Miner.Id] < this.creepsCountMax[Role.Creep.Miner.Id]) {
-			Factory.Creep.RequestCreep(this, Role.Creep.Miner.Id, 10);
+			this.AddCreep(Manager.Spawn.RequestCreep(Role.Creep.Miner.Id, 10));
 		}
 
 		if (this.creepsCountCurrent[Role.Creep.Storage.Id] < this.creepsCountMax[Role.Creep.Storage.Id]) {
-			Factory.Creep.RequestCreep(this, Role.Creep.Storage.Id, 10);
+			this.AddCreep(Manager.Spawn.RequestCreep(Role.Creep.Storage.Id, 10));
 		}
 
 		if (this.creepsCountCurrent[Role.Creep.Courier.Id] < this.creepsCountMax[Role.Creep.Courier.Id]) {
-			Factory.Creep.RequestCreep(this, Role.Creep.Courier.Id, 10);
+			this.AddCreep(Manager.Spawn.RequestCreep(Role.Creep.Courier.Id, 10));
 		}
 	}
 
@@ -130,7 +129,7 @@ class CrewHarvest extends CrewBase {
 				let path = PathFinder.search(source.pos, depot.pos).path;
 
 				path.forEach(pos => {
-					console.log('Request Construct:', STRUCTURE_ROAD, pos);
+					//console.log('Request Construct:', STRUCTURE_ROAD, pos);
 					Manager.Build.RequestConstruction(STRUCTURE_ROAD, pos);
 				});
 
@@ -185,7 +184,7 @@ class CrewHarvest extends CrewBase {
 	*/
 	CreepActivated(creep) {
 
-		console.log('Activated', creep.Role);
+		//console.log('Activated', creep.Role);
 
 		switch (creep.Role) {
 			case Role.Creep.Storage.Id: {

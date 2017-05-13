@@ -1,5 +1,5 @@
 const Role = { Creep: require('./Role.Creep') };
-const Factory = require('./Factory')
+const Manager = require('./Manager')
 
 class CrewBase {
 
@@ -112,6 +112,9 @@ class CrewBase {
 	* @param {string} name
 	*/
 	AddCreep(name) {
+		if(name == null)
+			return;
+
 		this.creepsInactive.push(name);
 		
 		let creepRole = Game.creeps[name].memory.role;

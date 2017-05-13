@@ -6,8 +6,6 @@ class ManagerBuild {
 	get queueTask() { return Memory.managers.build.queue.task; }
 
 	constructor() {
-		this.request = null;
-
 		if(Memory.managers == null) { Memory.managers = {}; }
 		if(Memory.managers.build == null) { Memory.managers.build = {}; }
 		if(Memory.managers.build.queue == null) { Memory.managers.build.queue = {}; }
@@ -33,7 +31,7 @@ class ManagerBuild {
 	 * @return {bool} result
 	 */
 	RequestConstruction(structureType, position) {
-		console.log('Adding', structureType, position);
+		//console.log('Adding', structureType, position);
 
 		let result = null;
 		let blocked = false;
@@ -76,7 +74,7 @@ class ManagerBuild {
 	 */
 	RequestTask() {
 
-		console.log('Requesting Task');
+		//console.log('Requesting Task');
 
 		if(this.queueConstruction.length > 0)
 		{

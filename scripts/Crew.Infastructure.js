@@ -1,6 +1,5 @@
 const CrewBase = require('./Crew.Base');
 const Role = { Creep: require('./Role.Creep') }
-const Factory = require('./Factory')
 const Manager = require('./Manager')
 
 class CrewInfastructure extends CrewBase {
@@ -48,11 +47,11 @@ class CrewInfastructure extends CrewBase {
 
 	Update() {
 		if (this.creepsCountCurrent[Role.Creep.Upgrader.Id] < this.creepsCountMax[Role.Creep.Upgrader.Id]) {
-			Factory.Creep.RequestCreep(this, Role.Creep.Upgrader.Id, 5);
+			this.AddCreep(Manager.Spawn.RequestCreep(Role.Creep.Upgrader.Id, 5));
 		}
 
 		if (this.creepsCountCurrent[Role.Creep.Builder.Id] < this.creepsCountMax[Role.Creep.Builder.Id]) {
-			Factory.Creep.RequestCreep(this, Role.Creep.Builder.Id, 5);
+			this.AddCreep(Manager.Spawn.RequestCreep(Role.Creep.Builder.Id, 5));
 		}
 
 		if(this.construct == null) {
