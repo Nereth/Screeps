@@ -126,6 +126,27 @@ class CrewHarvest extends CrewBase {
 				let source = Game.getObjectById(this.source);
 				let depot = Game.getObjectById(this.depot);
 
+				// Check for unblocked spaces around source.
+				let spaces = 0;
+				for(let i = -1; i <= 1; ++i) {
+					for(let j = -1; j <= 1; ++j) {
+						let checkPos = new RoomPosition(source.pos.x, source.pos.y, source.pos.roomName);
+						checkPos.x += i;
+						checkPos.y += j;
+
+						let result = checkPos.lookFor(LOOK_TERRAIN);
+						
+						if(result.length && result[0] != 'wall')
+							++spaces;
+
+						console.log('test', source.pos.x, checkPos.x);
+					}
+				}
+
+				this.creepsCountMax[Role.Creep.Miner.Id] = spaces;
+				console.log(spaces);
+
+
 				let path = PathFinder.search(source.pos, depot.pos).path;
 
 				path.forEach(pos => {
