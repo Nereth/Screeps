@@ -71,24 +71,6 @@ class ManagerSpawn {
 		}
 
 		this.requests = [];
-
-		/*
-		// Check if we have a request.
-		if (this.request != null) {
-			// Find a spawner that can fullfill the request.
-			for (let name in Game.spawns) {
-				let spawn = Game.spawns[name];
-				let role = Role.Creep[this.request.role];
-				if (spawn.canCreateCreep(role.Level[0]) == OK) {
-					// Request creep be created and send its name to the crew it belongs too.
-					let name = spawn.createCreep(role.Level[0], null, { role: this.request.role });
-					this.request.crew.AddCreep(name);
-					this.request = null;
-					break;
-				}
-			}
-		}
-		*/
 	}
 
 	PreUpdate() {

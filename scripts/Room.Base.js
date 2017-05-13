@@ -63,7 +63,7 @@ class RoomBase extends Room {
 		if (infastructureCrewMem.length == 0) {
 			for (let i = 0; i < 2; ++i) {
 				infastructureCrewMem.push(null);
-				let crew = new CrewHarvest(room, Role.Crew.Infastructure.Id, infastructureCrewMem.length - 1);
+				let crew = new CrewInfastructure(room, Role.Crew.Infastructure.Id, infastructureCrewMem.length - 1);
 				this.crews.push(crew);
 			}
 		}

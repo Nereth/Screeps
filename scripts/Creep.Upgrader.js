@@ -32,7 +32,6 @@ class CreepUpgrader extends CreepBase {
 				}
 
 				if (this.carry.energy == this.carryCapacity) {
-					this.say('? upgrade');
 					this.State = CreepUpgrader.State.Upgrading;
 				}
 			}
@@ -41,7 +40,6 @@ class CreepUpgrader extends CreepBase {
 			case CreepUpgrader.State.Upgrading: {
 
 				if (this.carry.energy == 0) {
-					this.say('?? harvest');
 					this.State = CreepUpgrader.State.Refueling;
 				}
 

@@ -75,10 +75,19 @@ class CrewInfastructure extends CrewBase {
 	}
 
 	/**
-	* @param {string} name
+	* @param {Creep} creep
 	*/
-	AddCreep(name) {
-		CrewBase.prototype.AddCreep.call(this, name);
+	CreepActivated(creep) {
+
+		//console.log('Activated', creep.Role);
+
+		switch (creep.Role) {
+			case Role.Creep.Builder.Id: {
+				creep.construct = this.construct;
+			}
+		}
+
+		this.updateOrders = true;
 	}
 };
 
