@@ -1,6 +1,35 @@
-const Role = { Creep: require('./Role.Creep') };
-const Manager = require('./Manager')
+import {MemoryAccessor} from './Memory.Accessor'
+import {Unit} from './Unit'
 
+export class Crew extends MemoryAccessor {
+    // Variables
+	_units: Unit[] = new Array<Unit>();
+
+    // Functions
+	
+	get Spawning(): string[] { return this.Memory.units.spawning; }
+
+	get Active(): string[] { return this.Memory.units.active; }
+
+	get CountCurrent(): any { return this.Memory.count.current; }
+
+	get CountMax(): any { return this.Memory.count.max; }
+
+    constructor(memory: Object) {
+        super(memory);
+
+		if(this.Memory.units == null) 				{ this.Memory.units = {}; }
+		if(this.Memory.units.spawning == null) 		{ this.Memory.units.spawning = []; }
+		if(this.Memory.units.active == null) 		{ this.Memory.units.active = []; }
+		if(this.Memory.units.count.current == null) { this.Memory.units.count.current = {}; }
+		if(this.Memory.units.count.max == null) 	{ this.Memory.units.count.max = {}; }
+	
+
+	}
+
+	
+}
+/*
 class CrewBase {
 
 	get memory() { return Memory.rooms[this.room].crews[this.role][this.id]; }
@@ -17,11 +46,7 @@ class CrewBase {
 	get state() { return this.memory.state; }
 	set state(state) { this.memory.state = state; }
 
-	/**
-	* @param {Room}		room
-	* @param {string}	role
-	* @param {number}	id
-	*/
+
 	constructor(room, role, id) {
 
 		this.room = room;
@@ -114,9 +139,7 @@ class CrewBase {
 		});
 	}
 
-	/**
-	* @param {string} name
-	*/
+
 	AddCreep(name) {
 		if(name == null)
 			return;
@@ -133,11 +156,7 @@ class CrewBase {
 		}
 	}
 
-	/**
-	* @param {Creep} creep
-	*/
 	CreepActivated(creep) {
 	}
 };
-
-module.exports = CrewBase;
+*/

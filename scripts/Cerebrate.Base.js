@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Memory_Accessor_1 = require("./Memory.Accessor");
 const Hive_1 = require("./Hive");
-class CerebrateBase extends Memory_Accessor_1.MemoryAccessor {
+class Cerebrate extends Memory_Accessor_1.MemoryAccessor {
     constructor(memory) {
         super(memory);
         this._hives = new Array();
@@ -30,6 +30,7 @@ class CerebrateBase extends Memory_Accessor_1.MemoryAccessor {
     HiveRemoved(roomId) {
         this.Hive.forEach(hive => {
             if (hive.id == roomId) {
+                delete this.Memory.hives[roomId];
                 this.Hive.splice(this.Hive.indexOf(hive));
             }
         });
@@ -50,4 +51,4 @@ class CerebrateBase extends Memory_Accessor_1.MemoryAccessor {
         });
     }
 }
-exports.CerebrateBase = CerebrateBase;
+exports.Cerebrate = Cerebrate;

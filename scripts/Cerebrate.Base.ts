@@ -1,7 +1,7 @@
 import {MemoryAccessor} from './Memory.Accessor'
 import {Hive} from './Hive'
 
-export class CerebrateBase extends MemoryAccessor {
+export class Cerebrate extends MemoryAccessor {
 
     // Variables
    private _hives: Array<{ id: string, hive: Hive }> = new Array();

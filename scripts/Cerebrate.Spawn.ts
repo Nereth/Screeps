@@ -1,6 +1,6 @@
-import { CerebrateBase } from './Cerebrate.Base'
+import { Cerebrate } from './Cerebrate.Base'
 
-export class CerebrateSpawn extends CerebrateBase {
+export class CerebrateSpawn extends Cerebrate {
 
     // Variables
 

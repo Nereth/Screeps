@@ -1,14 +1,14 @@
 import { MemoryAccessor } from './Memory.Accessor'
-import { CerebrateBase } from './Cerebrate.Base'
+import { Cerebrate } from './Cerebrate.Base'
 import { CerebrateSpawn } from './Cerebrate.Spawn'
 
 export class Overmind extends MemoryAccessor {
 
     // Variables
-    private _cerebrates: Array<CerebrateBase> = new Array<CerebrateBase>();
+    private _cerebrates: Array<Cerebrate> = new Array<Cerebrate>();
 
     get Hives(): Array<string> { return this.Memory.hives; }
-    get Cerebretes(): CerebrateBase[] { return this._cerebrates; }
+    get Cerebretes(): Cerebrate[] { return this._cerebrates; }
 
     // Functions
     constructor(memory: Object) {
