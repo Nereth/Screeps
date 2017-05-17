@@ -1,20 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Role_1 = require("./Role");
 class Unit extends Creep {
+    get Memory() { return this.memory; }
+    set Memory(memory) { this.memory = memory; }
     get Role() { return this.memory.role; }
     set Role(role) { this.memory.role = role; }
     constructor(id) {
         super(id);
-        this.memory.role = Unit.Role.Unknown;
+        this.Role = Role_1.Role.Unit.Unknown;
     }
     Update() {
     }
 }
 exports.Unit = Unit;
-(function (Unit) {
-    var Role;
-    (function (Role) {
-        Role[Role["Unknown"] = 0] = "Unknown";
-        Role[Role["Miner"] = 1] = "Miner";
-    })(Role = Unit.Role || (Unit.Role = {}));
-})(Unit = exports.Unit || (exports.Unit = {}));

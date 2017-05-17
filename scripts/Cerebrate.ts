@@ -4,7 +4,7 @@ import {Hive} from './Hive'
 export class Cerebrate extends MemoryAccessor {
 
     // Variables
-   private _hives: Array<{ id: string, hive: Hive }> = new Array();
+    private _hives: Array<{ id: string, hive: Hive }> = new Array();
 
     // Functions
     constructor(memory: Object) {

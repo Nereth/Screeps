@@ -1,19 +1,23 @@
 import {MemoryAccessor} from './Memory.Accessor'
+import {Role} from './Role'
 import {Unit} from './Unit'
 
 export class Crew extends MemoryAccessor {
+
     // Variables
-	_units: Unit[] = new Array<Unit>();
+	protected _units: Unit[] = new Array<Unit>();
 
     // Functions
+	get Role(): Role.Crew { return this.Memory.role; }
+	set Role(role: Role.Crew) { this.Memory.role = role; }
 	
-	get Spawning(): string[] { return this.Memory.units.spawning; }
+	get UnitsSpawning(): string[] { return this.Memory.units.spawning; }
 
-	get Active(): string[] { return this.Memory.units.active; }
+	get UnitsActive(): string[] { return this.Memory.units.active; }
 
-	get CountCurrent(): any { return this.Memory.count.current; }
+	get UnitsCountCurrent(): any { return this.Memory.count.current; }
 
-	get CountMax(): any { return this.Memory.count.max; }
+	get UnitsCountMax(): any { return this.Memory.count.max; }
 
     constructor(memory: Object) {
         super(memory);
@@ -24,11 +28,78 @@ export class Crew extends MemoryAccessor {
 		if(this.Memory.units.count.current == null) { this.Memory.units.count.current = {}; }
 		if(this.Memory.units.count.max == null) 	{ this.Memory.units.count.max = {}; }
 	
-
+		this.UpdateSpawningUnits();
 	}
 
-	
+	Update() {
+	}
+
+	UpdateSpawningUnits() {
+		// Check if any inactive creeps can be activated
+		this.UnitsSpawning.forEach(name => {
+			// If creep is dead, dispose of its memory.
+			if (Game.creeps[name] == null) {
+				this.UnitsSpawning.splice(this.UnitsSpawning.indexOf(name), 1);
+
+				if(this.UnitsCountCurrent[Memory.creeps[name].Role] > 0)
+					this.UnitsCountCurrent[Memory.creeps[name].Role]--;
+				
+				delete Memory.creeps[name];
+			}
+			else {
+				let creep = Game.creeps[name];
+
+				// Creep is done spawning. Add it to active list.
+				if (creep.id != null && creep.spawning == false) {
+					this.UnitsActive.push(name);
+					this.UnitsSpawning.splice(this.UnitsSpawning.indexOf(name), 1);
+
+					this.CreepActivated(name);
+				}
+			}
+		});
+
+		// Manage active creeps.
+		this.UnitsActive.forEach(name => {
+			let creep = Game.creeps[name];
+
+			// If creep is dead, dispose of its memory.
+			if (creep == null) {
+				this.UnitsActive.splice(this.UnitsActive.indexOf(name), 1);
+
+				if(this.UnitsCountCurrent[Memory.creeps[name].role] > 0)
+					this.UnitsCountCurrent[Memory.creeps[name].role]--;
+					
+				delete Memory.creeps[name];
+			}
+		});
+	}
+
+	AddUnit(unitName:string) {
+		if(unitName == null || Game.creeps[unitName] == null)
+			return;
+
+		if(Game.creeps[unitName].spawning)
+			this.UnitsSpawning.push(unitName);
+		else
+			this.UnitsActive.push(unitName);
+
+		let creepRole = Game.creeps[unitName].memory.role;
+
+		if(this.UnitsCountCurrent[creepRole] == null) {
+			this.UnitsCountCurrent[creepRole] = 1;
+		}
+		else {
+			this.UnitsCountCurrent[creepRole]++;
+		}
+	}
+
+	CreepActivated(unitName:string) {
+	}
 }
+
+
+
 /*
 class CrewBase {
 

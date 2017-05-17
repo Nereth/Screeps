@@ -1,5 +1,5 @@
 import { MemoryAccessor } from './Memory.Accessor'
-import { Cerebrate } from './Cerebrate.Base'
+import { Cerebrate } from './Cerebrate'
 import { CerebrateSpawn } from './Cerebrate.Spawn'
 
 export class Overmind extends MemoryAccessor {

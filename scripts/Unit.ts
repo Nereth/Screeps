@@ -1,26 +1,22 @@
+import {Role} from './Role'
 
 export class Unit extends Creep {
 
 	// Variables
 
 	// Functions
-	get Role(): Unit.Role { return this.memory.role; }
-	set Role(role: Unit.Role) { this.memory.role = role; }
+	get Memory(): any { return this.memory; }
+	set Memory(memory: any) { this.memory = memory; }
+
+	get Role(): Role.Unit { return this.memory.role; }
+	set Role(role: Role.Unit) { this.memory.role = role; }
 
 	constructor(id: string) {
 		super(id);
 
-		this.memory.role = Unit.Role.Unknown;
+		this.Role = Role.Unit.Unknown;
 	}
 
 	Update() {
-
-	}
-}
-
-export module Unit {
-	export enum Role {
-		Unknown,
-		Miner,
 	}
 }

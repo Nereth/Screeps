@@ -1,11 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Unit_1 = require("./Unit");
+const Role_1 = require("./Role");
 class UnitMiner extends Unit_1.Unit {
-    get State() { return this.memory.state; }
-    set State(state) { this.memory.state = state; }
+    get State() { return this.Memory.state; }
+    set State(state) { this.Memory.state = state; }
+    get TakeFrom() { return this.Memory.takeFrom; }
+    set TakeFrom(takeFrom) { this.Memory.takeFrom = takeFrom; }
+    get TakeTo() { return this.Memory.takeTo; }
+    set TakeTo(takeTo) { this.Memory.takeTo = takeTo; }
     constructor(id) {
         super(id);
+        this.Role = Role_1.Role.Unit.Miner;
     }
     Update() {
     }

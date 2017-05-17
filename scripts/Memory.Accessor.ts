@@ -2,7 +2,7 @@
 export class MemoryAccessor {
 
     // Variables
-    protected _memory: Object;
+    private _memory: Object;
 
     get Memory():any { return this._memory; }
 

@@ -1,6 +1,16 @@
 
-export namespace Role {
+export module Role {
+	export enum Unit {
+		Unknown,
+		Miner,
+		Courier,
+		Storage,
+	}
 
+	export enum Crew {
+		Unknown,
+		Harvest,
+	}
 }
 
 /*
