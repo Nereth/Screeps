@@ -7,7 +7,7 @@ export class Overmind extends MemoryAccessor {
     // Variables
     private _cerebrates: Array<Cerebrate> = new Array<Cerebrate>();
 
-    get Hives(): Array<string> { return this.Memory.hives; }
+    get Territories(): Array<string> { return this.Memory.territories; }
     get Cerebretes(): Cerebrate[] { return this._cerebrates; }
 
     // Functions
@@ -17,7 +17,7 @@ export class Overmind extends MemoryAccessor {
         console.log('Creating Cerebrates');
 
         // Initialize Overlord memory.
-        if(this.Memory.hives == null) { this.Memory.hives = Array<string>(); }
+        if(this.Memory.territories == null) { this.Memory.territories = Array<string>(); }
 
         // Initialize cerebrate memory.
         if(this.Memory.cerebrates == null) { this.Memory.cerebrates = {}; }
@@ -30,7 +30,7 @@ export class Overmind extends MemoryAccessor {
 
         console.log("FOR THE SWARM!");
 
-        this.CheckHives();
+        this.CheckTerritories();
 
         this.Cerebretes.forEach(cerebrate => {
             cerebrate.PreUpdate();
@@ -45,16 +45,16 @@ export class Overmind extends MemoryAccessor {
         });
     }
 
-    CheckHives(): void {
-        // Check if hives have been added.
+    CheckTerritories(): void {
+        // Check if hterritoriesives have been added.
         Object.keys(Game.rooms).forEach(name => {
-            if (this.Hives.includes(name) == false) {
+            if (this.Territories.includes(name) == false) {
                 // Check if we have the controller for this hive/room.
                 let controller = Game.rooms[name].controller;
                 if (controller != null && controller.my == true) {
-                    this.Hives.push(name);
+                    this.Territories.push(name);
                     this.Cerebretes.forEach(cerebrate => {
-                        cerebrate.HiveAdded(name);
+                        cerebrate.RoomAdded(name);
                     });
 
                     console.log('A New Hive Is Born!', name);
@@ -62,26 +62,26 @@ export class Overmind extends MemoryAccessor {
             }
         });
 
-        // Check if any hives have been removed.
-        this.Hives.forEach(name => {
+        // Check if any territories have been removed.
+        this.Territories.forEach(name => {
             if (Object.keys(Game.rooms).includes(name) == true) {
                 // Check if we have the controller for this hive/room.
                 let controller = Game.rooms[name].controller;
                 if (controller.my == false) {
                     this.Cerebretes.forEach(cerebrate => {
-                        cerebrate.HiveRemoved(name);
+                        cerebrate.RoomRemoved(name);
                     });
 
-                    this.Hives.splice(this.Hives.indexOf(name), 1);
+                    this.Territories.splice(this.Territories.indexOf(name), 1);
                     console.log('A Hive Has Been Lost!', name);
                 }
             }
             else {
                 this.Cerebretes.forEach(cerebrate => {
-                    cerebrate.HiveRemoved(name);
+                    cerebrate.RoomRemoved(name);
                 });
 
-                this.Hives.splice(this.Hives.indexOf(name), 1);
+                this.Territories.splice(this.Territories.indexOf(name), 1);
                 console.log('A Hive Has Been Lost!', name);
             }
         });

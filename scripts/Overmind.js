@@ -7,8 +7,8 @@ class Overmind extends Memory_Accessor_1.MemoryAccessor {
         super(memory);
         this._cerebrates = new Array();
         console.log('Creating Cerebrates');
-        if (this.Memory.hives == null) {
-            this.Memory.hives = Array();
+        if (this.Memory.territories == null) {
+            this.Memory.territories = Array();
         }
         if (this.Memory.cerebrates == null) {
             this.Memory.cerebrates = {};
@@ -18,11 +18,11 @@ class Overmind extends Memory_Accessor_1.MemoryAccessor {
         }
         this.Cerebretes.push(new Cerebrate_Spawn_1.CerebrateSpawn(this.Memory.cerebrates.spawn));
     }
-    get Hives() { return this.Memory.hives; }
+    get Territories() { return this.Memory.territories; }
     get Cerebretes() { return this._cerebrates; }
     Update() {
         console.log("FOR THE SWARM!");
-        this.CheckHives();
+        this.CheckTerritories();
         this.Cerebretes.forEach(cerebrate => {
             cerebrate.PreUpdate();
         });
@@ -33,35 +33,35 @@ class Overmind extends Memory_Accessor_1.MemoryAccessor {
             cerebrate.PostUpdate();
         });
     }
-    CheckHives() {
+    CheckTerritories() {
         Object.keys(Game.rooms).forEach(name => {
-            if (this.Hives.includes(name) == false) {
+            if (this.Territories.includes(name) == false) {
                 let controller = Game.rooms[name].controller;
                 if (controller != null && controller.my == true) {
-                    this.Hives.push(name);
+                    this.Territories.push(name);
                     this.Cerebretes.forEach(cerebrate => {
-                        cerebrate.HiveAdded(name);
+                        cerebrate.RoomAdded(name);
                     });
                     console.log('A New Hive Is Born!', name);
                 }
             }
         });
-        this.Hives.forEach(name => {
+        this.Territories.forEach(name => {
             if (Object.keys(Game.rooms).includes(name) == true) {
                 let controller = Game.rooms[name].controller;
                 if (controller.my == false) {
                     this.Cerebretes.forEach(cerebrate => {
-                        cerebrate.HiveRemoved(name);
+                        cerebrate.RoomRemoved(name);
                     });
-                    this.Hives.splice(this.Hives.indexOf(name), 1);
+                    this.Territories.splice(this.Territories.indexOf(name), 1);
                     console.log('A Hive Has Been Lost!', name);
                 }
             }
             else {
                 this.Cerebretes.forEach(cerebrate => {
-                    cerebrate.HiveRemoved(name);
+                    cerebrate.RoomRemoved(name);
                 });
-                this.Hives.splice(this.Hives.indexOf(name), 1);
+                this.Territories.splice(this.Territories.indexOf(name), 1);
                 console.log('A Hive Has Been Lost!', name);
             }
         });

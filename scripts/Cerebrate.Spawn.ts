@@ -6,13 +6,17 @@ export class CerebrateSpawn extends Cerebrate {
     // Variables
     static Instance: CerebrateSpawn;
 
+	//_roomData: Map<string, CerebrateSpawn.Room> = new Map();
+
+    // Functions
+	private get Rooms(): Map<string, CerebrateSpawn.Room> { return this.Memory.rooms; }
+
     get Requests(): any { return this.Memory.requests; }
 	set Requests(requests:any) { this.Memory.requests = requests; }
 
 	get Reserves() { return this.Memory.reserves; }
 	set Reserves(reserves) { this.Memory.reserves = reserves; }
 
-    // Functions
     constructor(memory: Object) {
         super(memory);
 
@@ -22,14 +26,26 @@ export class CerebrateSpawn extends Cerebrate {
 
 		if(this.Memory.requests == null) { this.Memory.requests = []; }
 		if(this.Memory.reserves == null) { this.Memory.reserves = []; }
+
+		if(this.Memory.rooms == null) { this.Memory.rooms = new Map<string, CerebrateSpawn.Room>(); }
     }
 
-    HiveAdded(roomId: string) {
-        super.HiveAdded(roomId);
+    RoomAdded(roomId: string) {
+        super.RoomAdded(roomId);
+
+		if(this.Rooms.has(roomId) == false) {
+			Game.rooms[roomId].find<StructureSpawn>(FIND_MY_SPAWNS).forEach(spawn => {
+				console.log('test1', roomId);
+				this.Rooms.set(roomId, { Spawns: new Array<string>() });
+				this.Rooms.get(roomId).Spawns.push(spawn.id);
+			});
+
+			
+		}
     }
 
-    HiveRemoved(roomId: string) {
-        super.HiveRemoved(roomId);
+    RoomRemoved(roomId: string) {
+        super.RoomRemoved(roomId);
     }
 
     PreUpdate(): void {
@@ -96,5 +112,11 @@ export class CerebrateSpawn extends Cerebrate {
 		}
 
 		this.Requests = [];
+	}
+}
+
+export module CerebrateSpawn {
+	export type Room = {
+		Spawns: Array<string>
 	}
 }

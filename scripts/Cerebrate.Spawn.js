@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Cerebrate_1 = require("./Cerebrate");
 class CerebrateSpawn extends Cerebrate_1.Cerebrate {
+    get Rooms() { return this.Memory.rooms; }
     get Requests() { return this.Memory.requests; }
     set Requests(requests) { this.Memory.requests = requests; }
     get Reserves() { return this.Memory.reserves; }
@@ -17,12 +18,21 @@ class CerebrateSpawn extends Cerebrate_1.Cerebrate {
         if (this.Memory.reserves == null) {
             this.Memory.reserves = [];
         }
+        if (this.Memory.rooms == null) {
+            this.Memory.rooms = new Map();
+        }
     }
-    HiveAdded(roomId) {
-        super.HiveAdded(roomId);
+    RoomAdded(roomId) {
+        super.RoomAdded(roomId);
+        if (this.Rooms.has(roomId) == false) {
+            Game.rooms[roomId].find(FIND_MY_SPAWNS).forEach(spawn => {
+                console.log('test1', roomId, this.Rooms.get(roomId));
+                this.Rooms.get(roomId).Spawns.push(spawn.id);
+            });
+        }
     }
-    HiveRemoved(roomId) {
-        super.HiveRemoved(roomId);
+    RoomRemoved(roomId) {
+        super.RoomRemoved(roomId);
     }
     PreUpdate() {
         this.HandleRequests();
